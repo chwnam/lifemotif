@@ -1,0 +1,9 @@
+# PyCharm
+.idea/*.xml
+.idea/*.iml
+!.idea/dictionaries/*.xml
+
+# environment variable read patch
+service_env
+
+__pycache__
