@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LifeMotif Prototype Index</title>
+</head>
+<body>
+    {% if user.is_authenticated %}
+        <p>You are currently signed in as {{ user.email }}</p>
+        <p>
+            Visit
+            <a href="{% url 'users:profile' %}">
+                profile page
+            </a>
+        </p>
+    {% else %}
+        <p>
+            Do you want to login via Google OAUTH2?
+            <a href="{%  url 'social:begin' backend='google-oauth2' %}">
+                Visit here,
+            </a>
+            or login via <a href="{% url 'users:login' %}">login page</a>.
+        </p>
+    {% endif %}
+    <p>
+        <a href="{%  url 'admin:index' %}">Django Admin</a>
+    </p>
+</body>
+</html>

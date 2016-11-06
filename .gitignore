@@ -1,9 +1,12 @@
 # PyCharm
 .idea/*.xml
 .idea/*.iml
+.idea/dataSources/*
 !.idea/dictionaries/*.xml
 
 # environment variable read patch
-service_env
+develop_env
 
 __pycache__
+*~
+*.[oa]

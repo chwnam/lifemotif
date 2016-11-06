@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+</head>
+<body>
+<h1>Profile</h1>
+{% if not request.user.is_authenticated %}
+    You are not logged in!
+{% else %}
+    <div>
+        <p>
+            <a href="{% url 'index' %}">Home</a> |
+            <a href="{% url 'users:logout' %}">
+                Logout
+            </a>
+        </p>
+    </div>
+    <div>
+        <ul>
+            <li>
+                Email: {{ user.email }}
+            </li>
+            <li>
+                First name: {{ user.first_name }}
+            </li>
+            <li>
+                Last name: {{ user.last_name }}
+            </li>
+            <li>
+                Joined: {{ user.date_joined }}
+            </li>
+            <li>
+                Last login: {{ user.last_login }}
+            </li>
+            <li>
+                Super User:
+                {% if user.is_superuser %}
+                    Yes
+                {% else %}
+                    No
+                {% endif %}
+            </li>
+            <li>
+                Staff:
+                {% if user.is_staff %}
+                    Yes
+                {% else %}
+                    No
+                {% endif %}
+            </li>
+
+        </ul>
+    </div>
+    <div>
+        <h2>Change password</h2>
+        <form method="post" action="{% url 'users:profile' %}">
+            <ul>
+                <li>
+                    <label for="password">Input password</label>
+                    <input id="password" type="password" name="password">
+                </li>
+                <li>
+                    <label for="password-confirm">Type again</label>
+                    <input id="password-confirm" type="password">
+                </li>
+            </ul>
+            <input type="submit" value="Change Password">
+            {% csrf_token %}
+        </form>
+    </div>
+    <script type="text/javascript">
+        var password = document.getElementById('password');
+        var passwordConfirm = document.getElementById('password-confirm');
+        var submit = document.querySelector('form input[type="submit"]');
+
+        function checkIdentical() {
+            if (password.value == "" || passwordConfirm.value == "") {
+                submit.disabled = true;
+                return;
+            }
+            submit.disabled = (password.value != passwordConfirm.value);
+        }
+
+        [password, passwordConfirm].forEach(function(item) {
+            item.addEventListener("keyup", checkIdentical);
+        });
+        checkIdentical();
+    </script>
+{% endif %}
+</body>
+</html>

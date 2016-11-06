@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LifeMotif Prototype Login</title>
+</head>
+<body>
+<h1>
+    Login
+</h1>
+
+{% if form.errors %}
+    <p>Incorrect ID, or password!</p>
+{% endif %}
+
+{% if next %}
+    {% if user.is_authenticated %}
+        <p>
+            You're not authorized to access the page. Please login with another account.
+        </p>
+    {% else %}
+        <p>
+            You are about to access a page that requires authentication. Please login.
+        </p>
+    {% endif %}
+{% endif %}
+
+{% if user.is_authenticated %}
+    <p>
+        You are currently signed in as {{ user.email }}
+        <a href="{% url 'users:logout' %}">
+            Sign Out
+        </a>
+    </p>
+{% else %}
+    <p>
+        Do you want to login via Google OAUTH2?
+        <a href="{% url 'social:begin' backend='google-oauth2' %}">
+            Visit here
+        </a>
+    </p>
+{% endif %}
+<p>
+    <a href="{% url 'admin:index' %}">Django Admin</a>
+</p>
+
+<div>
+    <form method="post" action="{% url 'users:login' %}">
+        {% csrf_token %}
+        <div>
+            <ul>
+                {{ form.username.label_tag }}
+                {{ form.username }}
+            </ul>
+            <ul>
+                {{ form.password.label_tag }}
+                {{ form.password }}
+            </ul>
+        </div>
+        <div>
+            <input type="submit" value="Sign In"/>
+            <input type="hidden" name="next" value="{{ next }}"/>
+        </div>
+    </form>
+</div>
+</body>
+</html>

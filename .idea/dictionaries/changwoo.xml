@@ -1,7 +1,15 @@
 <component name="ProjectDictionaryState">
   <dictionary name="changwoo">
     <words>
+      <w>appsettings</w>
+      <w>cors</w>
+      <w>corsheaders</w>
+      <w>djangorestframework</w>
+      <w>howto</w>
+      <w>mids</w>
       <w>startproject</w>
+      <w>tids</w>
+      <w>wsgi</w>
     </words>
   </dictionary>
 </component>

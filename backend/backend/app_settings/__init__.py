@@ -1,0 +1,3 @@
+"""
+Separated per-app settings.
+"""

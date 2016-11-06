@@ -1,0 +1,9 @@
+# Environment variables that django 'service' project requires.
+# 'manage.py' script is slightly modified to read this file at startup.
+
+export SECRET_KEY=""
+export DB_PASS=""
+
+# google oauth2
+export GOOGLE_OAUTH2_CLIENT_ID=""
+export GOOGLE_OAUTH2_CLIENT_SECRET=""
