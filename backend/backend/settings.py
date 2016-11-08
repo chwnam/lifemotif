@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'social.apps.django_app.default',  # python-social-auth
 
     # our apps
+    'backend',
     'emails',
     'users',
 ]
@@ -189,3 +190,71 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     LIFEMOTIF_DEFAULT_STATICFILES_DIR,
 )
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)-8s %(asctime)s '
+                      '%(module)s %(process)d %(thread)d %(message)s',
+            'datefmt': "%Y-%m-%d %H:%M:%S"
+        },
+        'simple': {
+            'format': '%(levelname)-8s %(message)s'
+        },
+    },
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+            'level': 'DEBUG',
+            'filters': [],
+        },
+        'file': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': PROJECT_DIR.child('logs').child('lifemotif.log'),
+            'formatter': 'verbose',
+            'filters': [],
+            'level': 'DEBUG',
+            'maxBytes': 200 * 1024,  # 200KiB
+            'backupCount': 10,       # 10 files
+            'encoding': 'utf-8',
+        },
+        'admin_mail': {
+            'class': 'django.utils.log.AdminEmailHandler',
+            'include_html': True,
+            'level': 'ERROR',
+            'filters': ['require_debug_false', ],
+        },
+        'null': {
+            'class': 'logging.NullHandler',
+            'level': 'DEBUG',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['null', ],
+            'propagate': True,
+            'level': 'INFO',
+        },
+        'django.request': {
+            'handlers': ['admin_mail', ],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'backend': {
+            'handlers': ['console', 'file', 'admin_mail', ],
+            'level': 'DEBUG',
+        },
+        'emails': {
+            'handlers': ['console', 'file', 'admin_mail', ],
+            'level': 'DEBUG',
+        },
+    }
+}
