@@ -7,6 +7,12 @@
 # environment variable read patch
 develop_env
 
+# all log files
+*.log
+
+# migrations
+**/migrations/*.py
+
 __pycache__
 *~
 *.[oa]
