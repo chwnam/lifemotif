@@ -9,13 +9,11 @@ class TidIndex(models.Model):
     """
     tid = models.IntegerField(
         primary_key=True,
-        name='tid',
         verbose_name='thread ID',
         help_text='Thread ID in Gmail. If a groups of mails have an identical number, then they are threaded.'
     )
 
-    diary_date = models.DateTimeField(
-        name='diary date',
+    diary_date = models.DateField(
         db_index=True
     )
 
@@ -31,7 +29,6 @@ class MidIndex(models.Model):
     """
     mid = models.IntegerField(
         primary_key=True,
-        name='mid',
         verbose_name='message ID',
         help_text='Message ID in Gmail. This is a unique 64 bit integer for one account.'
     )
@@ -44,7 +41,6 @@ class Profile(models.Model):
     Gmail specific user profile
     """
     label_id = models.CharField(
-        name='label_id',
         max_length=32,
         help_text='A unique string to identify an label. e.g. Label_40. Up to 32 characters.'
     )

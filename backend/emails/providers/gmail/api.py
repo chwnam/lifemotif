@@ -23,9 +23,7 @@ class GmailApi(object):
         """
         request_func = self.auth_dish.get_request_func()
 
-        return request_func(url,
-                            headers=self.auth_dish.default_request_header,
-                            *args, **kwargs)
+        return request_func(url, headers=self.auth_dish.default_request_header, *args, **kwargs)
 
     def get_labels(self):
         endpoint = '%s/%s/labels' % (self.url_base, self.auth_dish.user_email)
@@ -61,5 +59,5 @@ class GmailApi(object):
         :type mid: int
         :return:
         """
-        endpoint = '%s/%s/messages/%x' % (self.url_base, self.auth_dish.user_email.uid, mid)
+        endpoint = '%s/%s/messages/%x' % (self.url_base, self.auth_dish.user_email, mid)
         return self._make_request(endpoint, *args, **kwargs)
