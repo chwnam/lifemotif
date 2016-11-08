@@ -63,6 +63,7 @@ class IndexServiceTest(TestCase):
         self.index_service = IndexService(self.gmail_api, self.profile)
 
         # patch for self.index_service.get_latest_mid()
+        # noinspection PyUnresolvedReferences
         self.get_latest_mid_patcher = patch.object(self.index_service, 'get_latest_mid', return_value=int('101', 16))
         self.get_latest_mid_patcher.start()
         self.addCleanup(self.get_latest_mid_patcher.stop)
