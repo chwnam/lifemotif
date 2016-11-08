@@ -1,8 +1,11 @@
 from time import time
 from datetime import datetime
-
-from social.apps.django_app.default.models import UserSocialAuth
+from django.conf import settings
+from django.contrib.auth.models import User
+from django.core.exceptions import ImproperlyConfigured
+from django.utils.module_loading import import_string
 from social.apps.django_app.utils import load_strategy
+from social.apps.django_app.default.models import UserSocialAuth
 
 
 class BaseAuthDish(object):
@@ -119,3 +122,51 @@ class PythonSocialAuthDish(BaseAuthDish):
 
     def get_request_func(self):
         return self.backend.get_json
+
+
+def get_auth_dish(auth_dish_path=None, **kwargs):
+    """
+    Auth dish factory class
+
+    :param auth_dish_path: set None to get default dish class.
+                           The default value is set by LIFEMOTIF_DEFAULT_AUTH_DISH in settings.py
+
+    :param kwargs: arguments for passing a dish class.
+                   if a dish class is PythonSocialAuthDish, then you are required to input at least 'user' instance.
+                   e.g. get_auth_dish(user=request.user, request=request)
+    :return:
+    """
+    if auth_dish_path:
+        dotted_path = auth_dish_path
+    else:
+        dotted_path = settings.LIFEMOTIF_DEFAULT_AUTH_DISH
+
+    if not dotted_path:
+        raise ImproperlyConfigured('LIFEMOTIF_DEFAULT_AUTH_DISH setting not found!')
+
+    arguments = {}
+
+    if dotted_path == 'backend.auth_dishes.PythonSocialAuthDish':
+        arguments['user'] = kwargs.get('user')
+        arguments['request'] = kwargs.get('request')
+        if 'provider' in kwargs:
+            arguments['provider'] = kwargs['provider']
+        # user keyword must be specified, and it must be an instance of User object
+        if type(arguments['user']) is not User:
+            raise TypeError(
+                '\'PythonSocialAuthDish\' requires \'django.contrib.auth.models.User\' instance. '
+                'Specify it by using \'user\' keyword.'
+            )
+    else:
+        raise NotImplemented('\'{}\' is not a proper auth dish class'.format(dotted_path))
+
+    auth_dish_class = import_string(dotted_path)
+
+    if not issubclass(auth_dish_class, BaseAuthDish):
+        raise TypeError(
+            'auth_dish_class \'{}\' is not a subclass of BaseAuthDish'.format(
+                type(auth_dish_class).__name__
+            )
+        )
+
+    return auth_dish_class(**arguments)
